@@ -44,7 +44,7 @@ df3 = df3.drop('genotypes')
 df3 = df3.select('*','flatgen.*')
 df3 = df3.drop('flatgen')
 
-#df3.printSchema()
+df3.printSchema()
 
 
 # config_port = 5432
