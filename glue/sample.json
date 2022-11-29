@@ -1,0 +1,39 @@
+{
+  "name" : "sample",
+  "description" : "Genomics job",
+  "role" : "arn:aws:iam::829620709483:role/service-role/AWSGlueServiceRole-crawlerrole",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-scripts-829620709483-us-east-1/root/sample",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--class" : "GlueApp",
+    "--enable-job-insights" : "true",
+    "--additional-python-modules" : "glow.py==1.1.2",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-temporary-829620709483-us-east-1/root",
+    "--extra-jars" : "s3://hadoopprac/glowglue/glow-spark3-assembly-1.1.2-SNAPSHOT.jar"
+  },
+  "connections" : {
+    "connections" : [ "Apache Hudi Connector" ]
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 2880,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "3.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "Sorting-techniques-using-python",
+    "branch" : "master",
+    "folder" : "glue"
+  }
+}

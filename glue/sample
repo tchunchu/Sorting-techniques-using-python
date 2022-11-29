@@ -1,0 +1,73 @@
+import sys
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+#import pg8000
+print("before glowimport")
+#import psycopg2
+import glow
+
+print("after glowinmpior")
+
+import sys
+import glow 
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import input_file_name
+from pyspark.sql.functions import col
+from pyspark.sql.functions import  explode
+args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+
+#sc = SparkContext()
+#glueContext = GlueContext(sc)
+#spark = glueContext.spark_session
+#job = Job(glueContext)
+#job.init(args['JOB_NAME'], args)
+
+spark = SparkSession.builder.config('spark.hadoop.io.compression.codecs','io.projectglow.sql.util.BGZFCodec').getOrCreate()
+print(spark.version)
+
+glow.register(spark) 
+
+sc = spark.sparkContext
+glueContext = GlueContext(sc)
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+
+
+glow.register(spark) 
+df = spark.read.format('vcf').load('s3://hadoopprac/bensonhill/spark-submitb')
+df2 = df.withColumn("filename", input_file_name())
+df3 = df2.withColumn("flatgen",explode(df2.genotypes))
+df3 = df3.drop('genotypes')
+df3 = df3.select('*','flatgen.*')
+df3 = df3.drop('flatgen')
+
+df3.printSchema()
+
+
+# config_port = 5432
+# conn = pg8000.connect(
+#     database=args['DB'], 
+#     user=args['USER'], 
+#     password=args['PW'],
+#     host=args['HOST'],
+#     port=config_port
+# )
+# query = "TRUNCATE TABLE {0};".format(".".join([schema, table]))
+# cur = conn.cursor()
+# cur.execute(query)
+# conn.commit()
+# cur.close()
+# conn.close()
+
+
+
+
+
+
+
+
+
+job.commit()
