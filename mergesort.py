@@ -3,15 +3,15 @@ import random
 import time
 
 
-def msort(a):
+def mergesort(a):
     if len(a) > 1:
         mid = len(a)/2
         b = a[:mid]
         c = a[mid:]
 
 
-        msort(b)
-        msort(c)
+        mergesort(b)
+        mergesort(c)
         i = 0
         j = 0
         k = 0
@@ -36,7 +36,7 @@ def msort(a):
 st = time.time()
 a = random.sample(range(1,1000),999)
 a.sort(reverse=True)
-msort(a)
+mergesort(a)
 print ("%s sec" ,(time.time()-st)*1000)
 
 
